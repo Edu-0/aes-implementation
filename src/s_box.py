@@ -37,11 +37,3 @@ def aes_sbox(b):
     sub_byte = aa.arr_to_byte(byte_res)
 
     return sub_byte
-
-# byte = 0b00100010 # 0b00100010: 2x2 in S-Box = 93
-#
-# # table_positions(byte)
-#
-# final_sub_byte = aes_sbox(byte)
-#
-# print(hex(final_sub_byte))
