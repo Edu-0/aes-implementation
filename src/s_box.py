@@ -1,0 +1,47 @@
+import numpy as np
+import src.abstract_algebra as aa
+
+
+def table_positions(b):
+    # It's relevant to see those 4 bits to locate on the default table given by AES to verify answers
+    left_4_bits = (b >> 4) & 0b1111
+    right_4_bits = b & 0b1111
+    print(f"Left 4 bits: {bin(left_4_bits)} or {hex(left_4_bits)}")
+    print(f"Right 4 bits: {bin(right_4_bits)} or {hex(right_4_bits)}")
+    print("")
+
+
+def aes_sbox(b):
+    irr = 0b100011011
+    yf = aa.multiplicative_inverse(irr, b)
+
+    # Beginning the S-box programming
+
+    mat_a = np.array([
+        [1, 0, 0, 0, 1, 1, 1, 1],
+        [1, 1, 0, 0, 0, 1, 1, 1],
+        [1, 1, 1, 0, 0, 0, 1, 1],
+        [1, 1, 1, 1, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 0, 0, 0],
+        [0, 1, 1, 1, 1, 1, 0, 0],
+        [0, 0, 1, 1, 1, 1, 1, 0],
+        [0, 0, 0, 1, 1, 1, 1, 1]
+    ], dtype=int)
+
+    c = np.array([1, 1, 0, 0, 0, 1, 1, 0], dtype=int)
+
+    vet_b = aa.byte_to_array(bin(yf)[2::].zfill(8)[::-1])
+
+    byte_res = aa.affine_transform(mat_a, vet_b, c)
+
+    sub_byte = aa.arr_to_byte(byte_res)
+
+    return sub_byte
+
+# byte = 0b00100010 # 0b00100010: 2x2 in S-Box = 93
+#
+# # table_positions(byte)
+#
+# final_sub_byte = aes_sbox(byte)
+#
+# print(hex(final_sub_byte))
