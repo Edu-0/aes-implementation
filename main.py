@@ -53,24 +53,24 @@ def encrypt(bbs, rks):
         encrypted_blocks.append(encrypt_block(bbs[i], rks))
     return encrypted_blocks
 
+if __name__ == "__main__":
+    # Test key used for the early examples
+    initial_key = np.array(
+        [
+            [0xAC, 0x19, 0x28, 0x57],
+            [0x77, 0xFA, 0xD1, 0x5C],
+            [0x66, 0xDC, 0x29, 0x00],
+            [0xF3, 0x21, 0x41, 0x6A]
+        ],
+        dtype=int
+    )
 
-# Test key used for the early examples
-initial_key = np.array(
-    [
-        [0xAC, 0x19, 0x28, 0x57],
-        [0x77, 0xFA, 0xD1, 0x5C],
-        [0x66, 0xDC, 0x29, 0x00],
-        [0xF3, 0x21, 0x41, 0x6A]
-    ],
-    dtype=int
-)
+    # key = tc.array_creator(list(os.urandom(16))) Key generation
 
-# key = tc.array_creator(list(os.urandom(16))) Key generation
+    text = "Super text for testings"
+    byte_blocks = tc.start_encoding_conversion(text)
+    rk_list = generate_keys(initial_key)
 
-text = "Super text for testings"
-byte_blocks = tc.start_encoding_conversion(text)
-rk_list = generate_keys(initial_key)
+    final_encrypted = encrypt(byte_blocks, rk_list)
 
-final_encrypted = encrypt(byte_blocks, rk_list)
-
-print_hex(final_encrypted)
+    print_hex(final_encrypted)
