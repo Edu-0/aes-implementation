@@ -26,31 +26,30 @@ def s_box_block(bb):
     return res_array
 
 
-def shift_rows(bb):
-    return sr.shift_rows(s_box_block(bb))
-
-
-def mix_columns(bb):
-    return mc.mix_columns(sr.shift_rows(s_box_block(bb)))
-
-
-def add_round_key(bb, round_key):
-    return ark.add_round_key(mc.mix_columns(sr.shift_rows(s_box_block(bb))), round_key)
-
-
-def start_cryptography(bb, rk):
-    return add_round_key(bb, rk)
-
-
-def cryptograph_blocks(bbs, rk):
-    converted_blocks = []
-    for i in range(len(bbs)):
-        converted_blocks.append(start_cryptography(bbs[i], rk))
-    return converted_blocks
-
-
 def generate_keys(ik):
     return ke.words_to_keys(ke.key_expansion(ik))
+
+
+def encrypt_block(state, round_keys):
+    # Starting round
+    state = ark.add_round_key(state, round_keys[0])
+
+    # Rounds 1 to 9
+    for i in range(1, 10):
+        state = s_box_block(state)
+        state = sr.shift_rows(state)
+        state = mc.mix_columns(state)
+        state = ark.add_round_key(state, round_keys[i])
+
+    # Final round, no MixColumns
+    state = s_box_block(state)
+    state = sr.shift_rows(state)
+    state = ark.add_round_key(state, round_keys[10])
+    return state
+
+
+def encrypt(bbs, rks):
+    pass
 
 
 # Test key used for the early examples
@@ -70,6 +69,6 @@ text = "Super text for testings"
 byte_blocks = tc.start_encoding_conversion(text)
 rk_list = generate_keys(initial_key)
 
-encrypted_blocks = cryptograph_blocks(byte_blocks, initial_key)
+# encrypted_blocks = encrypt(byte_blocks, rk_list)
 
-print_hex(encrypted_blocks)
+# print_hex(encrypted_blocks)
