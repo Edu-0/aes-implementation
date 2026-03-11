@@ -51,5 +51,5 @@ def key_expansion(init_array):
 def words_to_keys(w):
     key_list = []
     for i in range(0, len(w), 4):
-        key_list.append(np.array(w[i:i + 4], dtype=int))
+        key_list.append(np.array(w[i:i + 4], dtype=int).T)
     return key_list

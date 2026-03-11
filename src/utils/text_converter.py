@@ -27,16 +27,15 @@ def normalize_list(bin_list):
 def array_creator(bin_list):
     array_list = []
     for i in range(0, len(bin_list), 16):
-        array_list.append(np.array(np.reshape(bin_list[i:i+16], (4,4)), dtype=int))
+        array_list.append(np.array(np.reshape(bin_list[i:i+16], (4, 4), order="F"), dtype=int)) # AES uses the column-major order, from Fortran, so I specify here in order = "F"
     return array_list
 
 
 def byte_blocks_to_text(byte_blocks):
     decoded_string = ""
     for _, bb in enumerate(byte_blocks):
-        for i in range(bb.shape[0]):
-            for j in range(bb.shape[1]):
-                decoded_string += f"{bb[i][j]:08b}"
+        for byte in bb.flatten(order="F"):
+            decoded_string += f"{byte:08b}"
     return decoded_string
 
 
