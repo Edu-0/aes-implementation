@@ -1,11 +1,10 @@
 import numpy as np
-import os
-import src.s_box as sb
-import src.shift_rows as sr
-import src.mix_columns as mc
-import src.add_round_key as ark
-import src.text_converter as tc
-import src.key_expansion as ke
+import src.aes.s_box as sb
+import src.aes.shift_rows as sr
+import src.aes.mix_columns as mc
+import src.aes.add_round_key as ark
+import src.utils.text_converter as tc
+import src.aes.key_expansion as ke
 
 
 def print_hex(blocks):
