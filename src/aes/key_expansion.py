@@ -46,3 +46,10 @@ def key_expansion(init_array):
         w.append(aa.xor_vector(w[i-4], temp))
     w = [np.array(x) for x in w] # Converting to work with NumPy as it's better optimized
     return w
+
+
+def words_to_keys(w):
+    key_list = []
+    for i in range(0, len(w), 4):
+        key_list.append(np.array(w[i:i + 4], dtype=int))
+    return key_list
