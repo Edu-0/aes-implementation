@@ -49,11 +49,12 @@ def cryptograph_blocks(bbs, rk):
     return converted_blocks
 
 
-def get_key():
-    return key
+def generate_keys(ik):
+    return ke.words_to_keys(ke.key_expansion(ik))
+
 
 # Test key used for the early examples
-key = np.array(
+initial_key = np.array(
     [
         [0xAC, 0x19, 0x28, 0x57],
         [0x77, 0xFA, 0xD1, 0x5C],
@@ -67,9 +68,8 @@ key = np.array(
 
 text = "Super text for testings"
 byte_blocks = tc.start_encoding_conversion(text)
+rk_list = generate_keys(initial_key)
 
-encrypted_blocks = cryptograph_blocks(byte_blocks, key)
+encrypted_blocks = cryptograph_blocks(byte_blocks, initial_key)
+
 print_hex(encrypted_blocks)
-
-expanded_keys = ke.key_expansion(key)
-print(expanded_keys)
