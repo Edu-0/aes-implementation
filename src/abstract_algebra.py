@@ -111,3 +111,9 @@ def xor_matrix(mat_a, mat_b):
         for j in range(mat_b.shape[1]):
             vet_res[i][j] = mat_a[i][j] ^ mat_b[i][j]
     return vet_res
+
+def xor_vector(vec_a, vec_b):
+    vet_res = np.zeros(len(vec_a), dtype=int)
+    for i in range(len(vec_a)):
+        vet_res[i] = vec_a[i] ^ vec_b[i]
+    return vet_res
