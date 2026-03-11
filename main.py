@@ -40,7 +40,6 @@ def encrypt_block(state, round_keys):
         state = sr.shift_rows(state)
         state = mc.mix_columns(state)
         state = ark.add_round_key(state, round_keys[i])
-
     # Final round, no MixColumns
     state = s_box_block(state)
     state = sr.shift_rows(state)
@@ -49,7 +48,10 @@ def encrypt_block(state, round_keys):
 
 
 def encrypt(bbs, rks):
-    pass
+    encrypted_blocks = []
+    for i in range(len(bbs)):
+        encrypted_blocks.append(encrypt_block(bbs[i], rks))
+    return encrypted_blocks
 
 
 # Test key used for the early examples
@@ -69,6 +71,6 @@ text = "Super text for testings"
 byte_blocks = tc.start_encoding_conversion(text)
 rk_list = generate_keys(initial_key)
 
-# encrypted_blocks = encrypt(byte_blocks, rk_list)
+final_encrypted = encrypt(byte_blocks, rk_list)
 
-# print_hex(encrypted_blocks)
+print_hex(final_encrypted)
