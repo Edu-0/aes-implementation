@@ -31,11 +31,19 @@ def array_creator(bin_list):
     return array_list
 
 
-def byte_blocks_to_text(byte_blocks):
+def byte_blocks_to_bin_string(byte_blocks):
     decoded_string = ""
     for _, bb in enumerate(byte_blocks):
         for byte in bb.flatten(order="F"):
             decoded_string += f"{byte:08b}"
+    return decoded_string
+
+
+def byte_blocks_to_hex_string(byte_blocks):
+    decoded_string = ""
+    for _, bb in enumerate(byte_blocks):
+        for byte in bb.flatten(order="F"):
+            decoded_string += f"{byte:02X}"
     return decoded_string
 
 
@@ -44,4 +52,4 @@ def start_encoding_conversion(text):
 
 
 def start_decoding_conversion(byte_blocks):
-    return byte_blocks_to_text(byte_blocks)
+    return decode_text(byte_blocks_to_bin_string(byte_blocks))
