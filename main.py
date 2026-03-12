@@ -100,5 +100,5 @@ if __name__ == "__main__":
 
     # print_hex(final_encrypted)
 
-    print_hex_simple(s_box_block(byte_block))
-    print_hex_simple(inverse_s_box_block(s_box_block(byte_block)))
+    encrypted_block = ark.add_round_key(mc.mix_columns(sr.shift_rows(s_box_block(byte_block))), initial_key)
+    
