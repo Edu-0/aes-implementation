@@ -118,6 +118,12 @@ if __name__ == "__main__":
     print(f"Encrypted block -> ")
     print_hex(final_encrypted)
 
+    print(f"Encrypted hex code: {tc.byte_blocks_to_hex_string(final_encrypted)}\n")
+
     decrypted_block = decrypt(final_encrypted, rk_list)
     print(f"Decrypted block -> ")
     print_hex(decrypted_block)
+
+    print(f"Decrypted hex code: {tc.byte_blocks_to_hex_string(decrypted_block)}")
+    decrypted_text = tc.start_decoding_conversion(decrypted_block)
+    print(f"Decrypted text: {decrypted_text}\n")
