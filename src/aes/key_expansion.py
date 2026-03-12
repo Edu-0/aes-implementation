@@ -30,7 +30,7 @@ def initial_key_generator(a):
 
 def g(word, r):
     word = np.roll(word, -1) # Shift left the values
-    word = [int(sb.aes_sbox(word[i])) for i in range(len(word))] # Apply S-Box
+    word = [int(sb.sbox(word[i])) for i in range(len(word))] # Apply S-Box
     word[0] ^= rcon[r] # XOR with the specified table (A table is better than generating the numbers, as it's O(1) here)
     return word
 

@@ -28,7 +28,7 @@ def s_box_block(bb):
     res_array = np.zeros((4, 4), dtype=int)
     for i in range(res_array.shape[0]):
         for j in range(res_array.shape[1]):
-            res_array[i][j] = sb.aes_sbox(bb[i][j])
+            res_array[i][j] = sb.sbox(bb[i][j])
 
     return res_array
 
@@ -36,7 +36,7 @@ def inverse_s_box_block(bb):
     res_array = np.zeros((4, 4), dtype=int)
     for i in range(res_array.shape[0]):
         for j in range(res_array.shape[1]):
-            res_array[i][j] = sb.decrypt_sbox(bb[i][j])
+            res_array[i][j] = sb.inv_sbox(bb[i][j])
 
     return res_array
 
@@ -101,4 +101,3 @@ if __name__ == "__main__":
     # print_hex(final_encrypted)
 
     encrypted_block = ark.add_round_key(mc.mix_columns(sr.shift_rows(s_box_block(byte_block))), initial_key)
-    

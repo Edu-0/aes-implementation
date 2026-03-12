@@ -11,7 +11,7 @@ def table_positions(b):
     print("")
 
 
-def aes_sbox(b):
+def sbox(b):
     irr = 0b100011011
     yf = aa.multiplicative_inverse(irr, b)
 
@@ -39,7 +39,7 @@ def aes_sbox(b):
     return sub_byte
 
 
-def decrypt_sbox(b):
+def inv_sbox(b):
     irr = 0b100011011
 
     mat_a_inv = np.array([
