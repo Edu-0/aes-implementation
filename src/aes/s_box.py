@@ -37,3 +37,31 @@ def aes_sbox(b):
     sub_byte = aa.arr_to_byte(byte_res)
 
     return sub_byte
+
+
+def decrypt_sbox(b):
+    irr = 0b100011011
+
+    mat_a_inv = np.array([
+        [0, 0, 1, 0, 0, 1, 0, 1],
+        [1, 0, 0, 1, 0, 0, 1, 0],
+        [0, 1, 0, 0, 1, 0, 0, 1],
+        [1, 0, 1, 0, 0, 1, 0, 0],
+        [0, 1, 0, 1, 0, 0, 1, 0],
+        [0, 0, 1, 0, 1, 0, 0, 1],
+        [1, 0, 0, 1, 0, 1, 0, 0],
+        [0, 1, 0, 0, 1, 0, 1, 0]
+    ], dtype=int)
+
+    c = np.array([1, 0, 1, 0, 0, 0, 0, 0], dtype=int)
+
+    vet_b = aa.byte_to_array(bin(b)[2::].zfill(8)[::-1])
+
+    byte_res = aa.affine_transform(mat_a_inv, vet_b, c)
+
+
+    inv_byte = aa.arr_to_byte(byte_res)
+
+    yf = aa.multiplicative_inverse(irr, inv_byte)
+
+    return yf

@@ -7,6 +7,13 @@ import src.utils.text_converter as tc
 import src.aes.key_expansion as ke
 
 
+def print_hex_simple(bb):
+    for i in range(bb.shape[0]):
+        for j in range(bb.shape[1]):
+            print(f"{bb[i, j]:02X}", end=" ")
+        print()
+
+
 def print_hex(blocks):
     for k, bb in enumerate(blocks):
         print(f"Block {k}")
@@ -25,6 +32,13 @@ def s_box_block(bb):
 
     return res_array
 
+def inverse_s_box_block(bb):
+    res_array = np.zeros((4, 4), dtype=int)
+    for i in range(res_array.shape[0]):
+        for j in range(res_array.shape[1]):
+            res_array[i][j] = sb.decrypt_sbox(bb[i][j])
+
+    return res_array
 
 def generate_keys(ik):
     return ke.words_to_keys(ke.key_expansion(ik))
@@ -55,6 +69,16 @@ def encrypt(bbs, rks):
 
 
 if __name__ == "__main__":
+    byte_block = np.array(
+        [
+            [0xEA, 0x04, 0x65, 0x85],
+            [0x83, 0x45, 0x5D, 0x96],
+            [0x5C, 0x33, 0x98, 0xB0],
+            [0xF0, 0x2D, 0xAD, 0xC5]
+        ],
+        dtype=int
+    )
+
     # Test key used for the early examples
     initial_key = np.array(
         [
@@ -74,4 +98,7 @@ if __name__ == "__main__":
 
     final_encrypted = encrypt(byte_blocks, rk_list)
 
-    print_hex(final_encrypted)
+    # print_hex(final_encrypted)
+
+    print_hex_simple(s_box_block(byte_block))
+    print_hex_simple(inverse_s_box_block(s_box_block(byte_block)))
