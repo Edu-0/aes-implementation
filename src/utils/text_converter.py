@@ -24,6 +24,7 @@ def normalize_list(bin_list):
     return bin_list
 
 
+# The array creator is needed to divide in different blocks of 16 bytes each, so it can be encrypted
 def array_creator(bin_list):
     array_list = []
     for i in range(0, len(bin_list), 16):

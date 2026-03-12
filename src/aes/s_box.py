@@ -42,6 +42,7 @@ def sbox(b):
 def inv_sbox(b):
     irr = 0b100011011
 
+    # Using the inverse of a matrix to decrypt later
     mat_a_inv = np.array([
         [0, 0, 1, 0, 0, 1, 0, 1],
         [1, 0, 0, 1, 0, 0, 1, 0],
@@ -59,9 +60,8 @@ def inv_sbox(b):
 
     byte_res = aa.affine_transform(mat_a_inv, vet_b, c)
 
-
     inv_byte = aa.arr_to_byte(byte_res)
 
-    yf = aa.multiplicative_inverse(irr, inv_byte)
+    yf = aa.multiplicative_inverse(irr, inv_byte) # The multiplicative inverse needs to be moved as the last step
 
     return yf

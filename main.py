@@ -24,6 +24,7 @@ def print_hex(blocks):
         print()
 
 
+# Working with the entire byte block with S-Box, byte by byte
 def s_box_block(bb):
     res_array = np.zeros((4, 4), dtype=int)
     for i in range(res_array.shape[0]):
@@ -82,9 +83,10 @@ def decrypt_block(state, round_keys):
     return state
 
 
+# Encrypt and Decrypt will start the process
 def encrypt(bbs, rks):
     encrypted_blocks = []
-    for i in range(len(bbs)):
+    for i in range(len(bbs)): # Passing block by block from the byte block list
         encrypted_blocks.append(encrypt_block(bbs[i], rks))
     return encrypted_blocks
 
