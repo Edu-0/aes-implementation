@@ -11,3 +11,10 @@ def shift_rows(state):
     for i in range(4):
         shifted_rows[i] = np.roll(state[i], -i)
     return shifted_rows
+
+
+def inv_shift_rows(state):
+    shifted_rows = state.copy()
+    for i in range(4):
+        shifted_rows[i] = np.roll(state[i], i)
+    return shifted_rows
