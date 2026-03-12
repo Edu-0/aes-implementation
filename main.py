@@ -32,13 +32,15 @@ def s_box_block(bb):
 
     return res_array
 
-def inverse_s_box_block(bb):
+
+def inv_s_box_block(bb):
     res_array = np.zeros((4, 4), dtype=int)
     for i in range(res_array.shape[0]):
         for j in range(res_array.shape[1]):
             res_array[i][j] = sb.inv_sbox(bb[i][j])
 
     return res_array
+
 
 def generate_keys(ik):
     return ke.words_to_keys(ke.key_expansion(ik))
@@ -54,10 +56,29 @@ def encrypt_block(state, round_keys):
         state = sr.shift_rows(state)
         state = mc.mix_columns(state)
         state = ark.add_round_key(state, round_keys[i])
+
     # Final round, no MixColumns
     state = s_box_block(state)
     state = sr.shift_rows(state)
     state = ark.add_round_key(state, round_keys[10])
+    return state
+
+
+def decrypt_block(state, round_keys):
+    # Starting round
+    state = ark.add_round_key(state, round_keys[-1])
+
+    # Rounds 9 to 1
+    for i in range(9, 0, -1):
+        state = sr.inv_shift_rows(state)
+        state = inv_s_box_block(state)
+        state = ark.add_round_key(state, round_keys[i])
+        state = mc.inv_mix_columns(state)
+
+    # Final round, no MixColumns
+    state = sr.inv_shift_rows(state)
+    state = inv_s_box_block(state)
+    state = ark.add_round_key(state, round_keys[0])
     return state
 
 
@@ -68,17 +89,14 @@ def encrypt(bbs, rks):
     return encrypted_blocks
 
 
-if __name__ == "__main__":
-    byte_block = np.array(
-        [
-            [0xEA, 0x04, 0x65, 0x85],
-            [0x83, 0x45, 0x5D, 0x96],
-            [0x5C, 0x33, 0x98, 0xB0],
-            [0xF0, 0x2D, 0xAD, 0xC5]
-        ],
-        dtype=int
-    )
+def decrypt(bbs, rks):
+    decrypted_blocks = []
+    for i in range(len(bbs)):
+        decrypted_blocks.append(decrypt_block(bbs[i], rks))
+    return decrypted_blocks
 
+
+if __name__ == "__main__":
     # Test key used for the early examples
     initial_key = np.array(
         [
@@ -97,7 +115,9 @@ if __name__ == "__main__":
     rk_list = generate_keys(initial_key)
 
     final_encrypted = encrypt(byte_blocks, rk_list)
+    print(f"Encrypted block -> ")
+    print_hex(final_encrypted)
 
-    # print_hex(final_encrypted)
-
-    encrypted_block = ark.add_round_key(mc.mix_columns(sr.shift_rows(s_box_block(byte_block))), initial_key)
+    decrypted_block = decrypt(final_encrypted, rk_list)
+    print(f"Decrypted block -> ")
+    print_hex(decrypted_block)
