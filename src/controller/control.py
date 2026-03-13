@@ -90,6 +90,6 @@ def decrypt_text(files_dir):
         try:
             file.write(tc.start_decoding_conversion(decrypted_block))
         except UnicodeDecodeError:
-            print("Erro: chave de descriptografia incorreta ou arquivo corrompido.")
+            print("Error: Wrong decrypting key or corrupted text.")
             return
     print("Text decrypted and saved on files folder")
