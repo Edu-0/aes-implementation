@@ -1,14 +1,13 @@
-import src.aes.cipher as cipher
+import src.model.cipher as cipher
 import src.utils.text_converter as tc
 
 if __name__ == "__main__":
-    # key = cipher.generate_key()
-    key = "EF9E77B8CC807EBEDEAC9AC588667F99" # Key string
+    key = cipher.generate_key()
     key_array = tc.string_to_array(key)
 
     text = "Super text for testings"
     byte_blocks = tc.start_encoding_conversion(text)
-    rk_list = cipher.generate_keys(key_array)
+    rk_list = cipher.expand_key(key_array)
 
     final_encrypted = cipher.encrypt(byte_blocks, rk_list)
     print(f"Encrypted block -> ")

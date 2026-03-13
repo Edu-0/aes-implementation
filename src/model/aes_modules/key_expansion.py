@@ -1,6 +1,6 @@
 import numpy as np
-import src.aes.s_box as sb
-import src.aes.abstract_algebra as aa
+import src.model.aes_modules.s_box as sb
+import src.model.abstract_algebra as aa
 
 rcon = [
     0x00,   # Round 1

@@ -1,4 +1,4 @@
-import src.aes.abstract_algebra as aa
+import src.model.abstract_algebra as aa
 
 
 def add_round_key(state, key):

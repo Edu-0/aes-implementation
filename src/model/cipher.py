@@ -1,11 +1,10 @@
 import os
 import numpy as np
-import src.aes.s_box as sb
-import src.aes.shift_rows as sr
-import src.aes.mix_columns as mc
-import src.aes.add_round_key as ark
-import src.aes.key_expansion as ke
-import src.utils.text_converter as tc
+import src.model.aes_modules.s_box as sb
+import src.model.aes_modules.shift_rows as sr
+import src.model.aes_modules.mix_columns as mc
+import src.model.aes_modules.add_round_key as ark
+import src.model.aes_modules.key_expansion as ke
 
 def print_hex_simple(bb):
     for i in range(bb.shape[0]):
@@ -43,7 +42,7 @@ def inv_s_box_block(bb):
     return res_array
 
 
-def generate_keys(ik):
+def expand_key(ik):
     return ke.words_to_keys(ke.key_expansion(ik))
 
 

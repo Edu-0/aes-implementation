@@ -1,5 +1,5 @@
 import numpy as np
-import src.aes.abstract_algebra as aa
+import src.model.abstract_algebra as aa
 
 
 def table_positions(b):
