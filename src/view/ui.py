@@ -1,5 +1,3 @@
-import os
-
 import src.controller.control as control
 
 
@@ -23,11 +21,8 @@ def start():
             case "2":
                 control.encrypt_plaintext(files_dir)
             case "3":
-                pass
+                control.decrypt_text(files_dir)
             case "4":
                 return
             case _:
                 print("Invalid choice, try again!\n")
-
-
-start()
