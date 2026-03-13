@@ -16,17 +16,6 @@ def gf_mul(f, g):
     return result
 
 
-def gf2_mul(f, g):
-    result = 0
-    for i in range(len(bin(g)[2:])):
-        if (g >> i) & 1:
-            temp = f
-            for _ in range(i):
-                temp = temp << 1
-            result ^= temp
-    return result
-
-
 def deg(b):
     for i in range(len(bin(b)[2:]) - 1, -1, -1):
         if (b >> i) & 1:

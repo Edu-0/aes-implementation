@@ -6,22 +6,6 @@ import src.model.aes_modules.mix_columns as mc
 import src.model.aes_modules.add_round_key as ark
 import src.model.aes_modules.key_expansion as ke
 
-def print_hex_simple(bb):
-    for i in range(bb.shape[0]):
-        for j in range(bb.shape[1]):
-            print(f"{bb[i, j]:02X}", end=" ")
-        print()
-
-
-def print_hex(blocks):
-    for k, bb in enumerate(blocks):
-        print(f"Block {k}")
-        for i in range(bb.shape[0]):
-            for j in range(bb.shape[1]):
-                print(f"{bb[i, j]:02X}", end=" ")
-            print()
-        print()
-
 
 # Working with the entire byte block with S-Box, byte by byte
 def s_box_block(bb):

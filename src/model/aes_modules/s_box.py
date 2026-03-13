@@ -2,7 +2,7 @@ import numpy as np
 import src.model.abstract_algebra as aa
 
 
-def table_positions(b):
+def table_positions(b): # No use on this code, but it'll be kept here as learning material
     # It's relevant to see those 4 bits to locate on the default table given by AES to verify answers
     left_4_bits = (b >> 4) & 0b1111
     right_4_bits = b & 0b1111

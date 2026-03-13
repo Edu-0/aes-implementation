@@ -48,7 +48,6 @@ def encrypt_plaintext(files_dir):
     rk_list = cipher.expand_key(key_array)
 
     final_encrypted = cipher.encrypt(byte_blocks, rk_list)
-    tc.byte_blocks_to_hex_string(final_encrypted)
 
     encrypted_path = os.path.join(files_dir, "encrypted.txt")
     with open(encrypted_path, "w") as file:
