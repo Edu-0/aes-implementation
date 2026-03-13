@@ -8,8 +8,8 @@ def encode_text(text):
 
 def decode_text(byte_text):
     bits_fix = int(byte_text, 2).to_bytes(len(byte_text) // 8, "big")
-    padding = bits_fix[-1] # Gets the last bit as it will always have padding
-    bits_fix = bits_fix[:-padding] # Removing the padding as it can conflict with the UTF-8 reading to decode
+    padding = bits_fix[-1]  # Gets the last bit as it will always have padding
+    bits_fix = bits_fix[:-padding]  # Removing the padding as it can conflict with the UTF-8 reading to decode
     return bits_fix.decode("UTF-8")
 
 
@@ -28,7 +28,7 @@ def normalize_list(bin_list):
 def array_creator(bin_list):
     array_list = []
     for i in range(0, len(bin_list), 16):
-        array_list.append(np.array(np.reshape(bin_list[i:i+16], (4, 4), order="F"), dtype=int)) # AES uses the column-major order, from Fortran, so I specify here in order = "F"
+        array_list.append(np.array(np.reshape(bin_list[i:i + 16], (4, 4), order="F"), dtype=int))  # AES uses the column-major order, from Fortran, so I specify here in order = "F"
     return array_list
 
 
@@ -55,10 +55,15 @@ def start_encoding_conversion(text):
 def start_decoding_conversion(byte_blocks):
     return decode_text(byte_blocks_to_bin_string(byte_blocks))
 
-def string_to_array(ks):
+
+def key_string_to_array(ks):
     cut_string = [ks[i:i + 2] for i in range(0, len(ks), 2)]
     hex_list = [int(cs, 16) for cs in cut_string]
 
     hex_array = np.array(np.reshape(hex_list, (4, 4)), dtype=int)
 
     return hex_array
+
+def hex_string_to_byte_list(hex_string):
+    cut_string = [hex_string[i:i+2] for i in range(0, len(hex_string), 2)]
+    return [int(cs, 16) for cs in cut_string]
