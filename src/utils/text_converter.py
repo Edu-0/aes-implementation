@@ -54,3 +54,11 @@ def start_encoding_conversion(text):
 
 def start_decoding_conversion(byte_blocks):
     return decode_text(byte_blocks_to_bin_string(byte_blocks))
+
+def string_to_array(ks):
+    cut_string = [ks[i:i + 2] for i in range(0, len(ks), 2)]
+    hex_list = [int(cs, 16) for cs in cut_string]
+
+    hex_array = np.array(np.reshape(hex_list, (4, 4)), dtype=int)
+
+    return hex_array

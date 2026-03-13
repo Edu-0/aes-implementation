@@ -101,4 +101,4 @@ def decrypt(bbs, rks):
 # Returns the usable key for the program and the key string
 def generate_key():
     key = os.urandom(16)
-    return tc.array_creator(list(key))[0], key.hex().upper()
+    return key.hex().upper()
