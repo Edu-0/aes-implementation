@@ -49,7 +49,7 @@ def encrypt_block(state, round_keys):
     return state
 
 
-# The decryption and encryption specific algorithms were done on past commits when it was done in EBC, now it's CTR mode
+# The decryption and encryption specific algorithms were done on past commits when it was done in ECB, now it's CTR mode
 def encrypt_decrypt(bbs, rest, rks, n_arr):
     encrypted_blocks = []
     for i in range(len(bbs)): # Passing block by block from the byte block list
