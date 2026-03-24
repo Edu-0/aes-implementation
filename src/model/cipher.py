@@ -67,7 +67,14 @@ def decrypt_block(state, round_keys):
 
 
 # Encrypt and Decrypt will start the process
-def encrypt(bbs, rks):
+# def encrypt(bbs, rks):
+#     encrypted_blocks = []
+#     for i in range(len(bbs)): # Passing block by block from the byte block list
+#         encrypted_blocks.append(encrypt_block(bbs[i], rks))
+#     return encrypted_blocks
+
+
+def encrypt(bbs, rks, n_arr):
     encrypted_blocks = []
     for i in range(len(bbs)): # Passing block by block from the byte block list
         encrypted_blocks.append(encrypt_block(bbs[i], rks))
@@ -85,3 +92,14 @@ def decrypt(bbs, rks):
 def generate_key():
     key = os.urandom(16)
     return key.hex().upper()
+
+
+def sum_nonce(n_arr):
+    for i in range(n_arr.shape[0]-1, -1, -1):
+        for j in range(n_arr.shape[1]-1, -1, -1):
+            if n_arr[i][j] == 255:
+                continue
+            else:
+                n_arr[i][j] += 1
+                return n_arr
+    return n_arr

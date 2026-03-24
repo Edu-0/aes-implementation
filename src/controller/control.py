@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 import src.model.cipher as cipher
 import src.utils.text_converter as tc
+from src.model.cipher import sum_nonce
 
 
 def get_files_dir():
@@ -20,6 +21,12 @@ def generate_key(files_dir):
         file.write(cipher.generate_key())
     print("Key generated on a file, store it on a safe place for it to be used again.")
 
+
+def generate_nonce(files_dir):
+    nonce_path = os.path.join(files_dir, "nonce.txt")
+    with open(nonce_path, "w") as file:
+        file.write(cipher.generate_key()) # Reutilizing the same key generation technique, as it's almost the same
+    print("Nonce generated on a file, store it on a safe place for reutilize.")
 
 def encrypt_plaintext(files_dir):
     try:
@@ -42,12 +49,23 @@ def encrypt_plaintext(files_dir):
         print(f"Key file not found, add a key.txt file in \"files\" folder")
         return
 
+    try:
+        nonce_path = os.path.join(files_dir, "nonce.txt")
+        with open(nonce_path, "r") as file:
+            initial_nonce = file.readline()
+            if len(initial_nonce) < 32:
+                print("Invalid Nonce read from files, it must have a size of 32 chars in hex")
+    except FileNotFoundError:
+        print(f"Nonce file not found, add a nonce.txt file in \"files\" folder")
+        return
+
     key_array = tc.key_string_to_array(initial_key)
+    nonce_array = tc.key_string_to_array(initial_nonce)
 
     byte_blocks = tc.start_encoding_conversion(plaintext)
     rk_list = cipher.expand_key(key_array)
 
-    final_encrypted = cipher.encrypt(byte_blocks, rk_list)
+    final_encrypted = cipher.encrypt(byte_blocks, rk_list, nonce_array)
 
     encrypted_path = os.path.join(files_dir, "encrypted.txt")
     with open(encrypted_path, "w") as file:
