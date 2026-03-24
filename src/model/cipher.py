@@ -50,12 +50,16 @@ def encrypt_block(state, round_keys):
 
 
 # The decryption and encryption specific algorithms were done on past commits when it was done in EBC, now it's CTR mode
-def encrypt_decrypt(bbs, rks, n_arr):
+def encrypt_decrypt(bbs, rest, rks, n_arr):
     encrypted_blocks = []
     for i in range(len(bbs)): # Passing block by block from the byte block list
         encrypted_blocks.append(xor_matrix(encrypt_block(n_arr, rks), bbs[i]))
         n_arr = sum_nonce(n_arr)
-    return encrypted_blocks
+    if rest:
+        res = rest ^ n_arr.flatten()[:, :len(rest)]
+    else:
+        res = ""
+    return encrypted_blocks, res
 
 
 # Returns the usable key for the program and the key string

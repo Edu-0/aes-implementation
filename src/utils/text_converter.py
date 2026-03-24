@@ -8,28 +8,17 @@ def encode_text(text):
 
 def decode_text(byte_text):
     bits_fix = int(byte_text, 2).to_bytes(len(byte_text) // 8, "big")
-    padding = bits_fix[-1]  # Gets the last bit as it will always have padding
-    bits_fix = bits_fix[:-padding]  # Removing the padding as it can conflict with the UTF-8 reading to decode
     return bits_fix.decode("UTF-8")
 
 
-# This function makes sure that the list has a size multiple of 16 for it to be able to divide into blocks of 4x4
-def normalize_list(bin_list):
-    len_bin_list = len(bin_list)
-    missing = 16 - len_bin_list % 16
-    if missing == 0:
-        missing = 16
-    for i in range(missing):
-        bin_list.append(missing)
-    return bin_list
-
-
-# The array creator is needed to divide in different blocks of 16 bytes each, so it can be encrypted
-def array_creator(bin_list):
-    array_list = []
-    for i in range(0, len(bin_list), 16):
-        array_list.append(np.array(np.reshape(bin_list[i:i + 16], (4, 4), order="F"), dtype=int))  # AES uses the column-major order, from Fortran, so I specify here in order = "F"
-    return array_list
+def array_creator(byte_list, block_size=16):
+    blocks = []
+    full_len = (len(byte_list) // block_size) * block_size
+    for i in range(0, full_len, 16):
+        block = np.array(byte_list[i:i + 16]).reshape((4, 4), order="F")
+        blocks.append(block)
+    rest = byte_list[full_len:] # 0 to 15 bytes
+    return blocks, rest
 
 
 def byte_blocks_to_bin_string(byte_blocks):
@@ -48,8 +37,12 @@ def byte_blocks_to_hex_string(byte_blocks):
     return decoded_string
 
 
+def vector_to_hex_string(vec):
+    return ''.join(f"{b:02X}" for b in vec)
+
+
 def start_encoding_conversion(text):
-    return array_creator(normalize_list(encode_text(text)))
+    return array_creator(encode_text(text))
 
 
 def start_decoding_conversion(byte_blocks):

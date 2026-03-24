@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 import src.model.cipher as cipher
 import src.utils.text_converter as tc
-from src.model.cipher import sum_nonce
 
 
 def get_files_dir():
@@ -62,14 +61,14 @@ def encrypt_plaintext(files_dir):
     key_array = tc.key_string_to_array(initial_key)
     nonce_array = tc.key_string_to_array(initial_nonce)
 
-    byte_blocks = tc.start_encoding_conversion(plaintext)
+    byte_blocks, rest = tc.start_encoding_conversion(plaintext)
     rk_list = cipher.expand_key(key_array)
 
-    final_encrypted = cipher.encrypt_decrypt(byte_blocks, rk_list, nonce_array)
+    final_encrypted, res = cipher.encrypt_decrypt(byte_blocks, rest, rk_list, nonce_array)
 
     encrypted_path = os.path.join(files_dir, "encrypted.txt")
     with open(encrypted_path, "w") as file:
-        file.write(tc.byte_blocks_to_hex_string(final_encrypted))
+        file.write(tc.byte_blocks_to_hex_string(final_encrypted) + res)
     print("Text encrypted and saved on files folder")
 
 
@@ -108,15 +107,15 @@ def decrypt_text(files_dir):
     nonce_array = tc.key_string_to_array(initial_nonce)
 
     byte_list = tc.hex_string_to_byte_list(encrypted)
-    encrypted_text_array = tc.array_creator(byte_list)
+    encrypted_text_array, rest = tc.array_creator(byte_list)
 
     rk_list = cipher.expand_key(key_array)
-    decrypted_block = cipher.encrypt_decrypt(encrypted_text_array, rk_list, nonce_array)
+    decrypted_block, res = cipher.encrypt_decrypt(encrypted_text_array, rest, rk_list, nonce_array)
 
     decrypted_path = os.path.join(files_dir, "decrypted.txt")
     with open(decrypted_path, "w", encoding='utf-8') as file:
         try:
-            file.write(tc.start_decoding_conversion(decrypted_block))
+            file.write(tc.start_decoding_conversion(decrypted_block) + res)
         except UnicodeDecodeError:
             print("Error: Wrong decrypting key or corrupted text.")
             return
