@@ -5,6 +5,7 @@ import src.model.aes_modules.shift_rows as sr
 import src.model.aes_modules.mix_columns as mc
 import src.model.aes_modules.add_round_key as ark
 import src.model.aes_modules.key_expansion as ke
+from src.model.abstract_algebra import xor_matrix
 
 
 # Working with the entire byte block with S-Box, byte by byte
@@ -48,44 +49,13 @@ def encrypt_block(state, round_keys):
     return state
 
 
-def decrypt_block(state, round_keys):
-    # Starting round
-    state = ark.add_round_key(state, round_keys[-1])
-
-    # Rounds 9 to 1
-    for i in range(9, 0, -1):
-        state = sr.inv_shift_rows(state)
-        state = inv_s_box_block(state)
-        state = ark.add_round_key(state, round_keys[i])
-        state = mc.inv_mix_columns(state)
-
-    # Final round, no MixColumns
-    state = sr.inv_shift_rows(state)
-    state = inv_s_box_block(state)
-    state = ark.add_round_key(state, round_keys[0])
-    return state
-
-
-# Encrypt and Decrypt will start the process
-# def encrypt(bbs, rks):
-#     encrypted_blocks = []
-#     for i in range(len(bbs)): # Passing block by block from the byte block list
-#         encrypted_blocks.append(encrypt_block(bbs[i], rks))
-#     return encrypted_blocks
-
-
-def encrypt(bbs, rks, n_arr):
+# The decryption and encryption specific algorithms were done on past commits when it was done in EBC, now it's CTR mode
+def encrypt_decrypt(bbs, rks, n_arr):
     encrypted_blocks = []
     for i in range(len(bbs)): # Passing block by block from the byte block list
-        encrypted_blocks.append(encrypt_block(bbs[i], rks))
+        encrypted_blocks.append(xor_matrix(encrypt_block(n_arr, rks), bbs[i]))
+        n_arr = sum_nonce(n_arr)
     return encrypted_blocks
-
-
-def decrypt(bbs, rks):
-    decrypted_blocks = []
-    for i in range(len(bbs)):
-        decrypted_blocks.append(decrypt_block(bbs[i], rks))
-    return decrypted_blocks
 
 
 # Returns the usable key for the program and the key string

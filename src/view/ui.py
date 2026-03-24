@@ -13,7 +13,7 @@ def start():
 
     files_dir = control.get_files_dir()
 
-    while choice != "4":
+    while True:
         choice = input("-> ")
 
         match choice:

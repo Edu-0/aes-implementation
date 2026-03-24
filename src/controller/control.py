@@ -65,7 +65,7 @@ def encrypt_plaintext(files_dir):
     byte_blocks = tc.start_encoding_conversion(plaintext)
     rk_list = cipher.expand_key(key_array)
 
-    final_encrypted = cipher.encrypt(byte_blocks, rk_list, nonce_array)
+    final_encrypted = cipher.encrypt_decrypt(byte_blocks, rk_list, nonce_array)
 
     encrypted_path = os.path.join(files_dir, "encrypted.txt")
     with open(encrypted_path, "w") as file:
@@ -94,13 +94,24 @@ def decrypt_text(files_dir):
         print(f"Key file not found, add a key.txt file in \"files\" folder")
         return
 
+    try:
+        nonce_path = os.path.join(files_dir, "nonce.txt")
+        with open(nonce_path, "r") as file:
+            initial_nonce = file.readline()
+            if len(initial_nonce) < 32:
+                print("Invalid Nonce read from files, it must have a size of 32 chars in hex")
+    except FileNotFoundError:
+        print(f"Nonce file not found, add a nonce.txt file in \"files\" folder")
+        return
+
     key_array = tc.key_string_to_array(initial_key)
+    nonce_array = tc.key_string_to_array(initial_nonce)
 
     byte_list = tc.hex_string_to_byte_list(encrypted)
     encrypted_text_array = tc.array_creator(byte_list)
 
     rk_list = cipher.expand_key(key_array)
-    decrypted_block = cipher.decrypt(encrypted_text_array, rk_list)
+    decrypted_block = cipher.encrypt_decrypt(encrypted_text_array, rk_list, nonce_array)
 
     decrypted_path = os.path.join(files_dir, "decrypted.txt")
     with open(decrypted_path, "w", encoding='utf-8') as file:
